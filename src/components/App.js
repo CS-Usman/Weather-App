@@ -1,7 +1,4 @@
 import React,{useState} from "react";
-import axios from 'axios';
-
-import backgound from "../images/valentin-1.jpg"
 
 function App(){
 
@@ -10,101 +7,107 @@ function App(){
     "July", "August", "September", "October", "November", "December"];
 
     var month= monthNames[new Date().getMonth()];
-    var year = new Date().getFullYear();
 
     // Day
 
     const dayNames = ["MONDAY ", " TUESDAY ", " WEDNESDAY ", " THURSDAY ", " FRIDAY ", " SATURDAY "," SUNDAY"];
     var day = dayNames[new Date().getDay()];
 
-    const [city,setCity] = useState("");
-    const [data,setData] = useState({
+    let[city,setCity] = useState("");
+    let[data,setData] = useState({
 
-        // temp
-        temp: undefined,
-        country: undefined,
-        icon : undefined,
-        main:undefined,
-        //info
-        description: undefined,
-        temp_min: undefined,
-        temp_max: undefined,
-        humidity: undefined,
-        wind: undefined,
-        cloud:undefined,
-        sunrise: undefined,
-        sunset: undefined
+        // weather main data
+        city:undefined,
+        country:undefined,
+        icon:undefined,
+        temp:undefined,
+        description:undefined,
         
-        
+        // weather details
+        temp_max:undefined,
+        wind:undefined,
+        sunrise:undefined,
+        temp_min:undefined,
+        rain_probability:undefined,
+        sunset:undefined
+    });
 
-    })
-    
-    const handleClick = () =>{
-        axios.get("https://api.openweathermap.org/data/2.5/weather?q="+city+"&units=metric&appid={APIKey}")
-        .then((response) => {
+
+    const handleCity = (event) =>{
+        setCity(event.target.value);
+    }
+
+    // reterieving data from api
+    const handleClick = () => {
+
+        // fetching for current weather 
+
+        fetch("https://api.openweathermap.org/data/2.5/weather?q="+city+"&units=metric&appid=c01cd62b4d4b1c48b8273aae277e9771")
+        .then(response => response.json())
+        .then(response => {
             setData({
-                
-                //temp
-                temp: response.data.main.temp,
-                country: response.data.sys.country,
-                icon: response.data.weather[0].icon,
-                main:response.data.weather[0].main,
+                city:response.name,
+                country:response.sys.country,
+                icon:response.weather[0].icon,
+                temp:response.main.temp,
+                description:response.weather[0].description,
 
-                // info
-                description: response.data.weather[0].description,
-                temp_min: response.data.main.temp_min,
-                temp_max: response.data.main.temp_max,
-                humidity: response.data.main.humidity,
-                wind:response.data.wind.speed,
-                cloud:response.data.clouds.all,
-                sunrise: response.data.sys.sunrise,
-                sunset: response.data.sys.sunset
+                // setting weather details
+                temp_max:response.main.temp_max,
+                wind:response.wind.speed,
+                sunrise:response.sys.sunrise,
+                temp_min:response.main.temp_min,
+                rain_probability:response.main.humidity,
+                sunset:response.sys.sunset
 
-                
             })
         })
-    }
-    console.log(data);
+
+        // fetching weather for Hourly
+        fetch("https://pro.openweathermap.org/data/2.5/forecast/hourly?q="+city+"&appid=c01cd62b4d4b1c48b8273aae277e9771")
+        .then(response => response.json())
+        .then(response => console.log(response));
+
+    };
+             
+    // console.log(data);
+    // converting sunrise and sunset
+    // let sunriseInLocalTime = new Date();
+    // sunriseInLocalTime.setUTCHours(data.sunrise);
+
+
+                        
+                        
     
     return(
-        <div className="container">
-        <img className="Image" src={backgound} alt="background" width={"100%"} height={"100%"}/>
-            <div className = "temp">
-                <div className="temp-info">
-                    <h2 className="country-name">Country {data.country}</h2>
-                    <h1 className="temp-data">{data.temp} °C</h1>
+        <div>
+            <div>
+                <div className="locationTime">
+                    {city}, {data.country}
+                    {day} {date} {month}
                 </div>
-                <div className="location-time">
-                    
-                    <h2 style={{fontSize:"2.2rem",color: "#f2f8fd"}}>{city}</h2>
-                    <h3 className="time">{day}, {date} {month} ' {year}</h3>
+                <div >
+                    <input type="text" placeholder="Search Location" value= {city} onChange ={handleCity}/>
+                    <button onClick={handleClick}>Search</button>
                 </div>
-                <div className="condition">
+            </div>
+            <div>
+                <div className="currentWeather">
                     <img src = {"http://openweathermap.org/img/wn/"+data.icon+"@2x.png"} alt=""/>
-                    <h3 style = {{color: "#f2f8fd",marginLeft:"2rem",marginTop:"1rem"}}>{data.main}</h3>
+                    {data.temp} {data.description}
+                </div>
+                <div className="weatherDetails">
+                    <div>
+                        {data.temp_max} Max temp {data.wind} Wind {data.sunrise} Sunrise
+                    </div>
+                    <div>
+                        {data.temp_min} Min temp {data.rain_probability} % Rain {data.sunset} Sunset
+                    </div>
                 </div>
             </div>
-            <div className="info">
-                <div className ="input">
-                    <input type="text" className="inputField" placeholder = "Search location "value = {city} onChange={ (event) => {
-                            setCity(event.target.value)
-                        }
-                    }/>
-                    <button type = "submit"onClick={handleClick} > <i className="fas fa-search"></i></button>
-                    
-                </div>
-                <h2 style = {{marginBottom:"4rem",fontSize:"1.9rem",color:"#f2f8fd"}}>Weather Details</h2>
-                <div className="details">
-                    <h3 className="detail-element">Description : {data.description} </h3>
-                    <h3 className="detail-element">Min Temperature : {data.temp_min} °C</h3>
-                    <h3 className="detail-element">Max Temperature : {data.temp_max} °C</h3>
-                    <h3 className="detail-element">Humidity : {data.humidity} %</h3>
-                    <h3 className="detail-element">Clouds : {data.cloud} %</h3>
-                    <h3 className="detail-element">Wind : {data.wind} m/s</h3>                   
-                </div>
+            <div className="weatherForecast">
 
             </div>
-
         </div>
     );
 }
