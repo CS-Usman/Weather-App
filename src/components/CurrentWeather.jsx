@@ -1,7 +1,16 @@
 import React from "react";
+let convertUtcToLocal = (utcTime) =>{
+  let sec = utcTime * 1000;
+  let date = new Date(sec);
+  let localTime = date.toLocaleTimeString();
+  return localTime
+}
 
 function CurrentWeather(props) {
-  let weatherData = props.data;
+  const weatherData = props.data;
+
+  const sunrise = convertUtcToLocal(weatherData.sys.sunrise);
+  const sunset = convertUtcToLocal(weatherData.sys.sunset);
   
   return (
     <div>
@@ -14,10 +23,10 @@ function CurrentWeather(props) {
       </div>
       <div className="weatherDetails">
         <div>
-          {weatherData.main.temp_max} Max temp {weatherData.wind.speed} Wind {weatherData.sys.sunrise} Sunrise
+          {weatherData.main.temp_max} Max temp {weatherData.wind.speed} Wind {sunrise} Sunrise
         </div>
         <div>
-          {weatherData.main.temp_min} Min temp {weatherData.humidity} % Rain {weatherData.sys.sunset}{" "}
+          {weatherData.main.temp_min} Min temp {weatherData.humidity} % Humidity {sunset}{" "}
           Sunset
         </div>
       </div>
