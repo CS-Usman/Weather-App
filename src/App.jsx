@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LocationAndTime from "./components/LocationAndTime";
 import CurrentWeather from "./components/CurrentWeather";
 import currentWeatherData from "./api/CurrentWeatherData";
@@ -9,20 +9,35 @@ function App() {
   const [city, setCity] = useState("");
   const [data, setData] = useState(null);
   const [forecast,setForecast] = useState("null");
+  const [sendingRequest, setSendingRequest] = useState(false);
+
   const handleCity = (event) => {
     setCity(event.target.value);
   };
   
-  const getData = async() =>{
-    try{
-      const data = await currentWeatherData(city);
-      const forecastData = await weatherForcastData(city);
-      setForecast(forecastData)
-      setData(data);
-    }catch(err){
-      console.log(err.message);
+  // const getData = async() =>{
+  //   try{
+  //     const data = await currentWeatherData(city);
+  //     setData(data);
+  //     const forecastData = await weatherForcastData(city);
+  //     setForecast(forecastData);
+  //   }catch(err){
+  //     console.log(err.message);
+  //   }
+  // }
+  useEffect(()=>{
+    const getData = async() =>{
+      try{
+        const data = await currentWeatherData(city);
+        setData(data);
+        const forecastData = await weatherForcastData(city);
+        setForecast(forecastData);
+      }catch(err){
+        console.log(err.message);
+      }
     }
-  }
+    getData();
+  },[sendingRequest])
 
   return (
     <div>
@@ -36,7 +51,8 @@ function App() {
             onChange={handleCity}
           />
           <button onClick={() => {
-            getData();
+            setSendingRequest(true);
+            // getData();
           }}>Search</button>
           {data!==null ? <CurrentWeather data={data} />:null}
         </div>
