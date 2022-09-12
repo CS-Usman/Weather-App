@@ -1,13 +1,28 @@
-import React from 'react'
-function WeatherForecast(props) {
-    const list = props.list;
-    console.log(list)
-    // console.log(list[0].main.temp);
-    // console.log(list[1].weather.icon);
+import React from 'react';
+const convertDayAndTime = (listItem)=>{
+  const dayName = listItem.dt * 1000;
+  return new Date(dayName).toLocaleDateString('en-US',{weekday:"long"});
+}
+const time = text => text.slice(12,19);
 
+function WeatherForecast({list}) {
+    const forecastData = list;
   return (
-    <div>forecast data
-    </div>
+    
+    <div className='weatherForecastSection'>{forecastData.map((item,index) => (
+      <div className key={index}>
+        <p>{convertDayAndTime(item)}</p>
+        <div>
+          <img
+            src={"http://openweathermap.org/img/wn/" + item.weather[0].icon + "@2x.png"}
+            alt="Icon"
+          />
+          <p>{item.main.temp}</p>
+        </div>
+        
+        <p>{time(item.dt_txt)}</p>
+      </div>
+    ))}</div>
   )
 }
 

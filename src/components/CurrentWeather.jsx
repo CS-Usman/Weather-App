@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 let convertUtcToLocal = (utcTime) =>{
   let sec = utcTime * 1000;
   let date = new Date(sec);
@@ -6,11 +6,20 @@ let convertUtcToLocal = (utcTime) =>{
   return localTime
 }
 
-function CurrentWeather(props) {
-  const weatherData = props.data;
+function CurrentWeather({weatherData}) {
+  const [time, setTime] = useState({
+    sunrise: "",
+    sunset: ""
+  });
 
-  const sunrise = convertUtcToLocal(weatherData.sys.sunrise);
-  const sunset = convertUtcToLocal(weatherData.sys.sunset);
+  useEffect(() => {
+    if (weatherData) {
+      setTime({
+        sunrise : convertUtcToLocal(weatherData.sys.sunrise),
+        sunset: convertUtcToLocal(weatherData.sys.sunset)
+      });
+    }
+  }, [weatherData]);
   
   return (
     <div>
@@ -23,10 +32,10 @@ function CurrentWeather(props) {
       </div>
       <div className="weatherDetails">
         <div>
-          {weatherData.main.temp_max} Max temp {weatherData.wind.speed} Wind {sunrise} Sunrise
+          {weatherData.main.temp_max} Max temp {weatherData.wind.speed} Wind {time.sunrise} Sunrise
         </div>
         <div>
-          {weatherData.main.temp_min} Min temp {weatherData.humidity} % Humidity {sunset}{" "}
+          {weatherData.main.temp_min} Min temp {weatherData.humidity} % Humidity {time.sunset}{" "}
           Sunset
         </div>
       </div>
