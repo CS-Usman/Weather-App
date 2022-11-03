@@ -1,0 +1,29 @@
+.currentWeatherContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+}
+.flexItems img {
+  width: 150px;
+}
+.flexItems {
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+span {
+  height: 130px;
+  background-color: white;
+  border-radius: 10px;
+  width: 0.3%;
+  opacity: 0.5;
+  margin-right: 80px;
+}
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 180px);
+}
+.description {
+  text-align: center;
+}

@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import LocationAndTime from "./components/LocationAndTime";
-import CurrentWeather from "./components/CurrentWeather";
+
+import LocationAndTime from "./components/locationAndTime/LocationAndTime";
+import CurrentWeather from "./components/currentWeather/CurrentWeather";
+import WeatherForecast from "./components/weatherForecast/WeatherForecast";
+
 import currentWeatherData from "./api/CurrentWeatherData";
 import weatherForcastData from "./api/weatherForecastData";
-import WeatherForecast from "./components/weatherForecast";
 
-import "./css/weatherForecast.css";
+import styles from "./App.module.css";
+
+import { CiSearch } from "react-icons/ci";
 
 function App() {
   const [city, setCity] = useState("");
@@ -17,41 +21,45 @@ function App() {
     setCity(event.target.value);
   };
 
-  const handleClick = ()=>{
+  const handleClick = () => {
     setRequest(true);
     getData();
-  }
+  };
 
-  const getData = async() =>{
+  const getData = async () => {
     console.log(request);
-    try{
-      if(request){
+    try {
+      if (request) {
         const data = await currentWeatherData(city);
         setData(data);
         const forecastData = await weatherForcastData(city);
         setForecast(forecastData);
       }
-    }catch(err){
+    } catch (err) {
       console.log(err.message);
     }
-  }
+  };
 
   return (
-    <div>
-      <div>
-        <LocationAndTime city={city} />
+    <div className={styles.App}>
+      <div className={styles.topContainer}>
+        <div>
+          <LocationAndTime city={city} />
+        </div>
         <div>
           <input
             type="text"
-            placeholder="Search Location"
+            placeholder="London..."
             value={city}
             onChange={handleCity}
           />
-          <button onClick={handleClick}>Search</button>
-          {data !== null ? <CurrentWeather weatherData={data} /> : null}
+          <button onClick={handleClick}>
+            <CiSearch size={25} />
+          </button>
         </div>
       </div>
-      <div>
+      {data !== null ? <CurrentWeather weatherData={data} /> : null}
+      <div class={styles.forecastContainer}>
         {forecast !== null ? <WeatherForecast list={forecast.list} /> : null}
       </div>
     </div>

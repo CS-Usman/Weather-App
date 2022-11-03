@@ -1,0 +1,17 @@
+.weatherForecastSection {
+  width: 100%;
+  display: flex;
+  overflow-x: auto;
+  justify-content: center;
+  margin: 10px;
+}
+.items {
+  margin: 10px;
+  width: 20%;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+.items img {
+  width: 70px;
+}

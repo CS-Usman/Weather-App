@@ -1,0 +1,32 @@
+.topContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+input {
+  border-style: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 5px;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: #fff;
+  width: 200px;
+  border-radius: 0px;
+  background-color: transparent;
+  margin-right: 10px;
+}
+
+.input ::placeholder {
+  color: white;
+  font-size: 18px;
+  letter-spacing: 2px;
+  font-weight: 100;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ffff;
+}

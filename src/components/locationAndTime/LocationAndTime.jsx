@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./locationAndTime.module.css";
 
 function LocationAndTime(props) {
   const cityName = props.city;
@@ -8,9 +9,8 @@ function LocationAndTime(props) {
     day: "numeric",
   });
   return (
-    <div className="locationTime">
-      {cityName}
-      {currentDate}
+    <div className={styles.locationTime}>
+      {cityName + " "} {currentDate}
     </div>
   );
 }
